@@ -1444,7 +1444,8 @@ int runBench()
 			 r.Set( PT_HALO, 1.0f );
 		 } },
 	};
-	std::printf( "\n=== bench: GPU time per frame (GL_TIME_ELAPSED), the harness's card moving under it at 60 fps; 120 frames of warm-up, 240 timed\n" );
+	std::printf( "\n=== bench: GPU time per frame (GL_TIME_ELAPSED), the harness's card moving under it at 60 fps; 120 frames of warm-up, 240 timed;\n"
+	             "    the whole frame is wall time from the plugin's call to glFinish (CPU and GPU, the query included)\n" );
 	GLuint query = 0;
 	glGenQueries( 1, &query );
 	for( const Case& c : cases )
@@ -1464,15 +1465,18 @@ int runBench()
 				if( !rig.Render( 1 ) )
 					return 1;
 			}
-			std::vector< double > gpu, readout, held;
+			std::vector< double > gpu, readout, held, whole;
 			for( int f = 0; f < 240; ++f )
 			{
 				rig.Upload( cards[ static_cast< size_t >( f % 8 ) ] );
 				glFinish();
+				const auto start = std::chrono::steady_clock::now();
 				glBeginQuery( GL_TIME_ELAPSED, query );
 				if( !rig.Render( 1 ) )
 					return 1;
 				glEndQuery( GL_TIME_ELAPSED );
+				glFinish();
+				whole.push_back( std::chrono::duration< double, std::milli >( std::chrono::steady_clock::now() - start ).count() );
 				GLuint64 ns = 0;
 				glGetQueryObjectui64v( query, GL_QUERY_RESULT, &ns );
 				const double ms = static_cast< double >( ns ) * 1e-6;
@@ -1482,9 +1486,11 @@ int runBench()
 			std::sort( gpu.begin(), gpu.end() );
 			std::sort( readout.begin(), readout.end() );
 			std::sort( held.begin(), held.end() );
-			std::printf( "  %-40s %-6s GPU median %6.3f ms, worst %6.3f (%4.1f%% of a 60 fps frame); readout frames %6.3f ms median (%zu), held frames %6.3f ms (%zu)\n",
+			std::sort( whole.begin(), whole.end() );
+			std::printf( "  %-40s %-6s GPU median %6.3f ms, worst %6.3f (%4.1f%% of a 60 fps frame); readout frames %6.3f ms median (%zu), held frames %6.3f ms (%zu); whole frame median %6.3f ms, worst %6.3f\n",
 			             c.what, size.name, gpu[ gpu.size() / 2 ], gpu.back(), 100.0 * gpu[ gpu.size() / 2 ] / ( 1000.0 / 60.0 ),
-			             readout.empty() ? 0.0 : readout[ readout.size() / 2 ], readout.size(), held.empty() ? 0.0 : held[ held.size() / 2 ], held.size() );
+			             readout.empty() ? 0.0 : readout[ readout.size() / 2 ], readout.size(), held.empty() ? 0.0 : held[ held.size() / 2 ], held.size(),
+			             whole[ whole.size() / 2 ], whole.back() );
 		}
 	glDeleteQueries( 1, &query );
 	return 0;

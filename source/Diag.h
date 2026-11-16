@@ -17,9 +17,9 @@
       list of sliders in someone else's inspector.
 
     What it covers is the failure that actually happens: `InitGL` returning
-    `FF_FAIL` because one of the six shaders would not compile. From the
+    `FF_FAIL` because one of the nine programs would not compile. From the
     operator's side that looks like "the effect does nothing", with no message
-    anywhere -- and with six passes it also records *which* one, which is the
+    anywhere -- and with nine passes it also records *which* one, which is the
     difference between a five-minute fix and an afternoon. The GL vendor and
     version strings go in next to it, because a shader that compiles on one
     machine and not on another is a driver answer, not a source answer.
