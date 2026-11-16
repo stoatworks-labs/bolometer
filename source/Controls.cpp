@@ -58,24 +58,28 @@ ControlInfo event( unsigned int id, const char* name, const char* group )
 
 //---------------------------------------------------------------------------
 // The defaults. Frame Rate 9 Hz is the idea; a shutter every 30 s so a clip
-// shows one (the cores' own defaults are minutes); Plateau 7% is Boson's
-// factory value; Manual's window spans the whole mapped range. Drift,
-// Narcissus, Palette and Halo were chosen over Resolume's demo clips through
-// --pipe (AGENTS.md says how).
+// shows one (the cores' own defaults are minutes). Drift, Narcissus,
+// Plateau, Palette and Halo were chosen over Resolume's demo clips through
+// --pipe (AGENTS.md says how): those clips' backgrounds are perfectly flat --
+// black or transparent, all of it one temperature -- and plateau
+// equalisation at Boson's 7% hands that one bin enough of the scale that
+// 0.3 K of narcissus and half a minute of 0.3 K/min drift swamp the subject.
+// At 2%, 0.1 K and 0.1 K/min both show, building toward each FFC, without
+// taking over. Manual's window spans the whole mapped range.
 //---------------------------------------------------------------------------
 const ControlInfo kTable[] = {
 	option( PT_FRAME_RATE, "Frame Rate", "Sensor", 0.0f, kRateNames, static_cast< int >( FrameRate::Count ) ),
 	standard( PT_SHUTTER_INTERVAL, "Shutter Interval", "Sensor", ParamFromShutterInterval( 30.0 ) ),
 	event( PT_SHUTTER, "Shutter", "Sensor" ),
-	standard( PT_DRIFT, "Drift", "Sensor", ParamFromDrift( 0.3 ) ),
-	standard( PT_NARCISSUS, "Narcissus", "Sensor", ParamFromNarcissus( 0.3 ) ),
+	standard( PT_DRIFT, "Drift", "Sensor", ParamFromDrift( 0.1 ) ),
+	standard( PT_NARCISSUS, "Narcissus", "Sensor", ParamFromNarcissus( 0.1 ) ),
 
 	option( PT_SPAN, "Span", "Span", 0.0f, kSpanNames, static_cast< int >( Span::Count ) ),
-	standard( PT_PLATEAU, "Plateau", "Span", ParamFromPlateau( 0.07 ) ),
+	standard( PT_PLATEAU, "Plateau", "Span", ParamFromPlateau( 0.02 ) ),
 	standard( PT_LEVEL, "Level", "Span", ParamFromLevel( 27.5 ) ),
 	standard( PT_WIDTH, "Width", "Span", ParamFromWidth( 25.0 ) ),
 
-	option( PT_PALETTE, "Palette", "Look", static_cast< float >( Palette::WhiteHot ), kPaletteNames, static_cast< int >( Palette::Count ) ),
+	option( PT_PALETTE, "Palette", "Look", static_cast< float >( Palette::Ironbow ), kPaletteNames, static_cast< int >( Palette::Count ) ),
 	standard( PT_HALO, "Halo", "Look", ParamFromHalo( 1.0 ) ),
 	standard( PT_MIX, "Mix", "Look", 1.0f ),
 };
