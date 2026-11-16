@@ -157,7 +157,8 @@ CameraFrame Camera::Advance( double t, const CameraSettings& settings, bool pres
 		if( win.end > t )
 			break;
 		lastEnd = win.end;
-		++seed;
+		if( !hooks.driftKeepsPattern )
+			++seed;
 		++completed;
 		completions.push_back( { win.end, seed } );
 		reschedule();
@@ -257,7 +258,7 @@ CameraFrame Camera::Advance( double t, const CameraSettings& settings, bool pres
 			}
 		if( hooks.driftNoReset )
 			since = startTime;
-		const double age = std::clamp( readAt - since, 0.0, model::kDriftAgeCap );
+		const double age = std::clamp( readAt - since, 0.0, hooks.driftNoCap ? kInfinity : model::kDriftAgeCap );
 		f.driftAmplitude = hooks.driftSqrt ? settings.driftRate * std::sqrt( age * model::kDriftAgeCap ) : settings.driftRate * age;
 		f.driftSeed      = pattern;
 	}

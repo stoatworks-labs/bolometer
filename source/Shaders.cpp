@@ -68,6 +68,7 @@ uniform float TempSpan;
 uniform int LumaModel;    // 0 the plugin; 1 a negative control
 uniform float DriftAmp;   // K RMS
 uniform uint DriftSeed;
+uniform int DriftModel;   // 0 the plugin; 1 a negative control
 uniform float NarcDepth;  // K
 uniform vec2 NarcCentre;  // pixels
 uniform float NarcR;      // the spot's radius, pixels
@@ -97,7 +98,7 @@ void main()
 	float T    = Weights.x * prev + Weights.y * S + Weights.z * ShutterTemp;
 	uint col   = pcg( uint( at.x ) ^ pcg( DriftSeed * 2u ) );
 	uint pix   = pcg( ( uint( at.y ) * 65536u + uint( at.x ) ) ^ pcg( DriftSeed * 2u + 1u ) );
-	float fpn  = 0.70710678 * ( unitVariate( col ) + unitVariate( pix ) );
+	float fpn  = DriftModel == 1 ? unitVariate( pix ) : 0.70710678 * ( unitVariate( col ) + unitVariate( pix ) );
 	float r    = length( vec2( at ) + 0.5 - NarcCentre );
 	FragColor  = vec4( T + DriftAmp * fpn - NarcDepth * discOverlap( r, NarcR, NarcB ), 0.0, 0.0, 1.0 );
 }

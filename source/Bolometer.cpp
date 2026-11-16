@@ -245,6 +245,7 @@ void BolometerPlugin::render( const FFGLTextureStruct* input, const GLint* hostV
 		const double cx = 0.5 * width + ( hooks.narcissusModel == 3 ? 0.05 * height : 0.0 ), cy = 0.5 * height;
 		glUniform1f( where( p, "DriftAmp" ), static_cast< float >( f.driftAmplitude ) );
 		glUniform1ui( where( p, "DriftSeed" ), f.driftSeed );
+		glUniform1i( where( p, "DriftModel" ), hooks.driftModel );
 		glUniform1f( where( p, "NarcDepth" ), static_cast< float >( depth ) );
 		glUniform2f( where( p, "NarcCentre" ), static_cast< float >( cx ), static_cast< float >( cy ) );
 		glUniform1f( where( p, "NarcR" ), static_cast< float >( radius ) );

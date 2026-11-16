@@ -92,6 +92,8 @@ public:
 		bool noFreeze          = false;///< sensor frames read out through the FFC
 		bool driftNoReset      = false;///< the drift's age counted from the start, never reset
 		bool driftSqrt         = false;///< the drift growing as sqrt( age )
+		bool driftKeepsPattern = false;///< an FFC resets the drift's age but keeps its pattern
+		bool driftNoCap        = false;///< the drift's age never capped
 	};
 
 	/// The next host frame, at `t` seconds. `press` starts an FFC at the next

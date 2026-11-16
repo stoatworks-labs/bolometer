@@ -39,6 +39,7 @@ public:
 		double haloSigmaScale  = 1.0;  ///< the halo's Gaussian this much wider
 		double haloSign        = 1.0;  ///< -1: the unsharp mask's sign flipped
 		int narcissusModel     = 0;    ///< 1 its radius in frame widths; 2 removed by an FFC; 3 off centre
+		int driftModel         = 0;    ///< 1 the pattern all per-pixel, no column part
 		int paletteModel       = 0;    ///< 1 an index off by one; 2 the table reversed
 		bool alphaPassThrough  = false;///< the clip's alpha handed through
 		bool lumaIgnoresAlpha  = false;///< a transparent pixel keeps its colour's temperature
