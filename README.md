@@ -61,6 +61,38 @@ as black.
 > [user guide](https://stoatworks-labs.com/software/bolometer/guide/#flashing-and-keeping-it-safe)
 > has the table and how to keep a show within the guidance.
 
+<!-- downloads:start -->
+
+## Download
+
+**[v0.1.0](https://github.com/stoatworks-labs/bolometer/releases/tag/v0.1.0)** — prebuilt for macOS and Windows. Pick your platform:
+
+<details>
+<summary><b>macOS</b> — Universal (Apple Silicon + Intel)</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| Universal (Apple Silicon + Intel) · .dmg disk image | [`bolometer-0.1.0-macos-universal.dmg`](https://github.com/stoatworks-labs/bolometer/releases/download/v0.1.0/bolometer-0.1.0-macos-universal.dmg) | 228 KB |
+| Universal (Apple Silicon + Intel) · .zip archive | [`bolometer-macos-universal.zip`](https://github.com/stoatworks-labs/bolometer/releases/latest/download/bolometer-macos-universal.zip) | 188 KB |
+
+</details>
+
+<details>
+<summary><b>Windows</b> — x64</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| x64 · .exe installer | [`bolometer-0.1.0-windows-x86_64-setup.exe`](https://github.com/stoatworks-labs/bolometer/releases/download/v0.1.0/bolometer-0.1.0-windows-x86_64-setup.exe) | 249 KB |
+| x64 · .zip archive | [`bolometer-windows-x86_64.zip`](https://github.com/stoatworks-labs/bolometer/releases/latest/download/bolometer-windows-x86_64.zip) | 119 KB |
+
+</details>
+
+All builds, checksums and release notes: [github.com/stoatworks-labs/bolometer/releases](https://github.com/stoatworks-labs/bolometer/releases).
+
+macOS builds are signed and notarised and open normally. The Windows builds are unsigned, so SmartScreen warns once.
+
+<!-- downloads:end -->
+
 ## Controls
 
 | Group | |
