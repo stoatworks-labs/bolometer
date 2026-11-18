@@ -63,7 +63,7 @@ hands the clip through untouched.
 
 ## Status
 
-**v0.1.0, local only, 16 November 2026. Never loaded into Resolume.**
+**v0.1.0, 16 November 2026. Never loaded into Resolume.**
 
 ### Measured offline, on macOS
 
@@ -108,7 +108,8 @@ on every frame (a 60 Hz sensor) and Halo 3: a whole frame **1.30 ms** at 720p an
 
 - **No host has loaded it.** Not Arena, not Avenue, on any platform. `oxbow` (the fleet's test
   host) reads the bundle and renders through it, which is all.
-- **Windows** has never been built. There is no CI.
+- **Windows** is built by CI (`ci.yml`), and `tools/wincheck.ps1` loads the DLL as a host
+  does and reads its name, id, type and parameters; no host has loaded it there.
 - **No thermal camera was compared.** Every figure is checked against the model as written in
   the spec, and the model against the datasheets' words, not against footage from a Lepton or
   a Boson.

@@ -86,10 +86,13 @@ the composite or the resize.
 - **Provisional hand copies:** `source/StoatworksAbout*.h` (guide = "", no user guide) and
   `ATTRIBUTIONS.md`. Once the project is registered in stoatworks-backend, `sync-about.py`
   and `sync-attributions.py` generate them; edit them there then.
-- No `.github/workflows/`, on purpose. GitHub Actions only on a public repo.
-- Windows has never been built; the CMake has the branches from filings, untested.
-- Local only: `~/dev/bolometer`, no remote, nothing released, not on the website, never
-  loaded into Resolume. The spec is `~/Projects/resolume/specs/SPEC-bolometer.md`.
+- `.github/workflows/`: `ci.yml` (macOS arm64 with `bmtest --list`, `--offline` and glslc;
+  Windows x64 with vcpkg's GLEW and `tools/wincheck.ps1`, which loads the DLL as a host does)
+  and `release.yml` (a `v*` tag publishes the universal bundle and the x64 DLL, zips, a dmg
+  and an installer). Actions run because the repo is public; a private copy must never
+  enable them. `wincheck.ps1`'s `-Params` moves whenever a control or the About block does.
+- `~/Projects/resolume/bolometer`, public at github.com/stoatworks-labs/bolometer. The spec is
+  `~/Projects/resolume/specs/SPEC-bolometer.md`.
 
 ## Diagnostics
 

@@ -124,8 +124,9 @@ and the shutter opening 3/26 s before its end; the shutter at 27.5 °C; drift li
 Drift's rate, half in the columns, capped at 600 s; the narcissus spot's R and b; σ = 0.01 H;
 the damping's first-order form per sensor frame; LeptonModule's palettes standing in for FLIR's.
 
-Not done: loading it into Resolume on any platform; a Windows build; comparing with a real
-thermal camera; a user guide, presets, an OpenFX port, a browser demo.
+Not done: loading it into Resolume on any platform; comparing with a real thermal camera; a
+user guide, presets, an OpenFX port, a browser demo. Windows is built by CI, and
+`tools/wincheck.ps1` loads the DLL as a host does.
 
 ## Would this hold on another rasteriser, at another raster?
 
