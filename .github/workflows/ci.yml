@@ -111,7 +111,7 @@ jobs:
         # pwsh checks only the LAST exit code of a step, so it is checked here.
         # -Params changes whenever a control or the About block does.
         run: |
-          ./tools/wincheck.ps1 -Dll "build/Release/Bolometer.dll" -Name "SW Bolometer" -Id BO01 -Kind effect -Params 16 -First "Frame Rate"
+          ./tools/wincheck.ps1 -Dll "build/Release/Bolometer.dll" -Name "SW Bolometer" -Id BO01 -Kind effect -Params 17 -First "Frame Rate"
           if( $LASTEXITCODE ) { exit $LASTEXITCODE }
 
       - uses: actions/upload-artifact@v7

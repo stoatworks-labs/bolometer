@@ -2,7 +2,7 @@
     What a host sees of a built Windows DLL, with no GL and no Resolume.
 
         tools/wincheck.ps1 -Dll build/Release/Bolometer.dll -Name "SW Bolometer" `
-                           -Id BO01 -Kind effect -Params 16 -First "Frame Rate"
+                           -Id BO01 -Kind effect -Params 17 -First "Frame Rate"
 
     It LOADS the DLL (so a missing runtime or dependency fails here, where
     dumpbin cannot see it), finds plugMain, and asks it what Resolume asks
