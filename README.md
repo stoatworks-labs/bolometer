@@ -1,8 +1,12 @@
 # bolometer
 
 > **AI-assisted project.** This codebase was created with [Claude](https://claude.com/claude-code)
-> (Anthropic), directed and reviewed by a human author. **It has never been loaded into
-> Resolume.** What's established is established by an offline harness, `bmtest`, that drives
+> (Anthropic), directed and reviewed by a human author. In **Resolume Arena 7.29.0 on a Mac**
+> it loads with every control as declared and, over a still test card, drifts on Arena's clock,
+> takes a Shutter press and changes the picture with every control a still can show. On
+> **Windows** its release build loads, registers and renders in Arena 7.27.1 on software
+> rendering, all 10 valued controls live. Everything else is established by an offline
+> harness, `bmtest`, that drives
 > the real plugin class through the same `ProcessOpenGL` a host calls, in a headless GL
 > context on a synthetic clock. It runs on this Mac's GPU at two rasters, and again on Apple's
 > software renderer. The camera's bolometers follow an RK4 integration of their own lag to
@@ -48,6 +52,15 @@ Temperature comes from the clip's encoded luma and alpha, T = 15 °C + 25 K × l
 **Luma is not temperature**: that mapping is a choice, and a transparent pixel reads as cold
 as black.
 
+> **Photosensitivity note.** The automatic gain re-ranges the palette whenever the clip's
+> brightness changes, so on a dark clip with small flickering lights it can turn that flicker
+> into flashing over a large part of the picture. Over eight of Resolume's demo clips the
+> defaults stayed at or under three flashes a second, the line broadcast and web guidance
+> draws; at Frame Rate 60 Hz, or in Rainbow, two dark flickering clips went over it (4.5 a
+> second in a third of the picture). The shutter is a freeze, not a flash. The
+> [user guide](https://stoatworks-labs.com/software/bolometer/guide/#flashing-and-keeping-it-safe)
+> has the table and how to keep a show within the guidance.
+
 ## Controls
 
 | Group | |
@@ -63,7 +76,33 @@ hands the clip through untouched.
 
 ## Status
 
-**v0.1.0, 16 November 2026. Never loaded into Resolume.**
+**v0.1.0, released 18 November 2026, and early days.** It has been in Resolume Arena on
+both platforms, over a still test card, and nowhere else: no show, no real footage, no real
+GPU on Windows, nothing timed inside Resolume, and never beside a real thermal camera.
+
+### In Resolume
+
+- **Windows, Arena 7.27.1** (win-lab, software rendering: Mesa llvmpipe, no GPU, no sound
+  device), the fleet's Arena gate on the DLL `release.yml` built from the registered tree:
+  it loads and registers (`SW Bolometer` / `BO01` / effect), all 18 host controls (the 17
+  declared plus Arena's Opacity) match their names, order, types, ranges and defaults, it
+  renders (45 levels from its bare input at the defaults), and Arena's log stays clean: 8
+  passed, 0 failed, 2 skipped. All 10 valued controls changed Arena's picture: Drift with
+  Shutter Interval Off, Level and Width in Span Manual. Frame Rate, Shutter Interval and
+  Shutter are recorded inert: on a still carrier they change only when the picture is
+  refreshed, not what a grab shows. Software rendering says nothing about a GPU or speed.
+- **macOS, Arena 7.29.0** on Apple Silicon (macOS 26), the same run's universal bundle, over
+  REST with one layer added on top of an open show and a still of the harness's card on it:
+  `SW Bolometer` is in the effect list with all 17 controls, their defaults and the option
+  names as declared, and the About line reads `Bolometer v0.1.0`. From Arena's composition
+  snapshot (mean difference in 8-bit levels over the middle three-fifths): the effect at its
+  defaults 20.5 from the bare clip; with Drift 0 and the shutter Off, 0.06 over 3 s (still);
+  Drift at 1 K a minute 12.7 after 6 s and 5.7 after 6 more, so the drift grows on Arena's
+  clock; a Shutter pressed over REST (true, then false) 16.6, and after it the picture is the
+  drift-free still's to 0.10, so the FFC wiped the drift; Narcissus 6.4, Halo 9.0, Plateau
+  27.0, White Hot to Ironbow 10.5, Black Hot to Rainbow 162.7, Span 26.9, Level 91.0, Width
+  10.2, Mix 21.9; Frame Rate 0.0, as a still should give; Mix 0 against the bare clip 0.0.
+  The layer was removed, Arena quit without saving and the show file untouched.
 
 ### Measured offline, on macOS
 
@@ -106,10 +145,11 @@ on every frame (a 60 Hz sensor) and Halo 3: a whole frame **1.30 ms** at 720p an
 
 ### Not established
 
-- **No host has loaded it.** Not Arena, not Avenue, on any platform. `oxbow` (the fleet's test
-  host) reads the bundle and renders through it, which is all.
-- **Windows** is built by CI (`ci.yml`), and `tools/wincheck.ps1` loads the DLL as a host
-  does and reads its name, id, type and parameters; no host has loaded it there.
+- **Resolume only over a still test card**, on two machines: not Avenue, not a show, not real
+  footage, not a GPU on Windows. The 9 Hz stutter and the shutter's freeze have never been
+  watched inside Resolume; the offline harness checks both against the host's clock.
+- **Windows** is built by CI (`ci.yml`, MSVC with no warnings), and `tools/wincheck.ps1`
+  loads the DLL as a host does and reads its name, id, type and parameters.
 - **No thermal camera was compared.** Every figure is checked against the model as written in
   the spec, and the model against the datasheets' words, not against footage from a Lepton or
   a Boson.
@@ -122,7 +162,9 @@ on every frame (a 60 Hz sensor) and Halo 3: a whole frame **1.30 ms** at 720p an
 - The software renderer was checked at 320×180 only, and `--resize` at its own three rasters.
 - The defaults were chosen over seven of Resolume's bundled clips through `--pipe`, looked at
   as stills, not in a show.
-- No user guide, no presets and no OpenFX port.
+- No presets and no OpenFX port. The user guide is
+  [docs/USER-GUIDE.md](docs/USER-GUIDE.md), on the site at
+  [stoatworks-labs.com/software/bolometer/guide](https://stoatworks-labs.com/software/bolometer/guide/).
 
 ## Browser demo
 

@@ -125,9 +125,16 @@ and the shutter opening 3/26 s before its end; the shutter at 27.5 °C; drift li
 Drift's rate, half in the columns, capped at 600 s; the narcissus spot's R and b; σ = 0.01 H;
 the damping's first-order form per sensor frame; LeptonModule's palettes standing in for FLIR's.
 
-Not done: loading it into Resolume on any platform; comparing with a real thermal camera; a
-user guide, presets, an OpenFX port. Windows is built by CI, and
-`tools/wincheck.ps1` loads the DLL as a host does.
+In Resolume (18 November 2026, README's Status has the numbers): the fleet's Arena gate on
+win-lab (Arena 7.27.1, software rendering) with `plugin-bench/arena/expect/bolometer.json`, 8
+passed, 0 failed, 2 skipped, all 10 valued controls live, Frame Rate, Shutter Interval and
+Shutter recorded inert (a still carrier can't show them); and Arena 7.29.0 on this Mac over
+REST, one layer on top of the open show with a still of the card, snapshot diffs for every
+control, drift growing on Arena's clock and a REST Shutter press wiping it.
+
+Not done: a show, real footage or a GPU on Windows in Resolume; comparing with a real thermal
+camera; presets, an OpenFX port. The user guide is `docs/USER-GUIDE.md`. Windows is built by
+CI, and `tools/wincheck.ps1` loads the DLL as a host does.
 
 ## Would this hold on another rasteriser, at another raster?
 
