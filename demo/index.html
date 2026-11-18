@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SW Bolometer — browser demo | Stoatworks Labs</title>
+    <meta name="description" content="Try SW Bolometer, an FFGL effect for Resolume, in your browser: a thermal camera on an uncooled microbolometer core looking at your clip, with the 12 ms thermal lag, the export-limited 9 Hz readout, the shutter's freeze, drift, the narcissus spot, plateau equalisation, halos and four palettes. The plugin's own GLSL, ported to WebGL2 unedited, run by a JavaScript port of its CPU half that only a reader checks. A demo, not the plugin." />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./vendor/kit.css" />
+    <link rel="stylesheet" href="./bolometer.css" />
+    <link rel="canonical" href="https://bolometer-demo.stoatworks-labs.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Stoatworks Labs" />
+    <meta property="og:title" content="SW Bolometer — browser demo | Stoatworks Labs" />
+    <meta property="og:description" content="Try SW Bolometer, an FFGL effect for Resolume, in your browser: a thermal camera on an uncooled microbolometer core looking at your clip, with the 12 ms thermal lag, the export-limited 9 Hz readout, the shutter's freeze, drift, the narcissus spot, plateau equalisation, halos and four palettes. The plugin's own GLSL, ported to WebGL2 unedited, run by a JavaScript port of its CPU half that only a reader checks. A demo, not the plugin." />
+    <meta property="og:url" content="https://bolometer-demo.stoatworks-labs.com/" />
+    <meta property="og:image" content="https://stoatworks-labs.com/thumbs/bolometer.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta property="og:image:alt" content="SW Bolometer" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body data-plugin="bolometer">
+    <section class="bo-warning" id="photosensitivity" aria-labelledby="bo-warning-title">
+      <h2 class="bo-warning__title" id="bo-warning-title">Photosensitivity note</h2>
+      <p>
+        <strong>Bolometer adds no flashes of its own: the shutter freezes the picture, it
+        doesn't flash it.</strong> But its auto-ranging stretches whatever temperatures the
+        clip has across the whole palette, so a dark clip's small flicker can become a large
+        flash. Flashing light can trigger seizures in people with photosensitive epilepsy.
+      </p>
+      <p>
+        Measured over eight of Resolume's demo clips at the plugin's defaults (9 Hz, Ironbow),
+        it stayed at three flashes a second or fewer; at 60 Hz, or with Rainbow, two of them
+        went over, up to 4.5 a second over a third of the picture. This page opens on the
+        defaults over the harness's card, and that view, measured the same way from the
+        page's own output for 40 seconds through the first shutter, made no flash across
+        the picture and one in 40 seconds in the worst third of it. The same view at 60 Hz
+        measured the same; with Rainbow, and with each preset over 12 seconds, it made
+        none. A clip of your own is stretched the same way.
+        <strong>Pause</strong>, under the picture, stops it at once.
+      </p>
+    </section>
+
+    <main id="demo">
+      <noscript>
+        <h1>SW Bolometer</h1>
+        <p>
+          A thermal camera on an uncooled microbolometer core, looking at your clip, for
+          Resolume: an FFGL effect. Every pixel is a tiny thermal mass with a 12 ms time
+          constant, read out at the export-limited 9 Hz, corrected by a calibration that a
+          shutter refreshes every so often, and a histogram decides which colour each
+          temperature gets. The stutter, the freeze, the contrast that jumps, the halos, the
+          stripes and the dark centre all follow from the camera; nothing is drawn on top.
+        </p>
+        <p>
+          This demo runs the plugin's shaders and a port of its CPU half in your browser, so
+          it needs JavaScript and WebGL2. The plugin itself, its source and its downloads are
+          on <a href="https://github.com/stoatworks-labs/bolometer">its repository</a>.
+        </p>
+        <ul>
+          <li><a href="https://github.com/stoatworks-labs/bolometer">Source on GitHub</a></li>
+        </ul>
+      </noscript>
+    </main>
+
+    <script type="module" src="./plugin.js"></script>
+    <script
+      src="./vendor/support-footer.js"
+      defer
+      data-app="Bolometer"
+      data-repo="https://github.com/stoatworks-labs/bolometer"
+      data-note="A browser demo of the plugin's shaders over a port of its CPU half. Nothing you load here leaves your machine."
+    ></script>
+  </body>
+</html>

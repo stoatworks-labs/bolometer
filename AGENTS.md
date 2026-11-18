@@ -63,7 +63,8 @@ mechanism, each from a datasheet's words (the spec quotes them).
   30 frames without a verdict, the step's size decides), by way of filings.
 - **Shutter Interval's default is 30 s**, so a clip shows a shutter; the cores' own defaults are
   minutes.
-- **No OpenFX port, no browser demo** (not required this round).
+- **No OpenFX port** (not required this round). The browser demo came after the release: see
+  "Browser demo", below.
 
 ## How the defaults were chosen
 
@@ -125,7 +126,7 @@ Drift's rate, half in the columns, capped at 600 s; the narcissus spot's R and b
 the damping's first-order form per sensor frame; LeptonModule's palettes standing in for FLIR's.
 
 Not done: loading it into Resolume on any platform; comparing with a real thermal camera; a
-user guide, presets, an OpenFX port, a browser demo. Windows is built by CI, and
+user guide, presets, an OpenFX port. Windows is built by CI, and
 `tools/wincheck.ps1` loads the DLL as a host does.
 
 ## Would this hold on another rasteriser, at another raster?
@@ -282,6 +283,68 @@ The spec was written first and has been changed to match each of these:
   1.5×).
 - **The pictures at 4.99e8 ms** are bit-identical on this GPU (measured); the check allows a code
   for the software renderer, where 2 of 12 cases differ by one.
+
+## Browser demo
+
+https://bolometer-demo.stoatworks-labs.com/ (`demo/`, the Worker in `wrangler.toml`: a route,
+plus a proxied AAAA `100::` record for `bolometer-demo` made through the API on 2026-11-18;
+delete the record and the page goes dark while deploys stay green). `deploy.yml` redeploys it
+on every push to main.
+
+- **What is the plugin's and what is not.** `demo/shaders.js` and `demo/palettes.js` are
+  spliced from `Shaders.cpp` and `Palettes.cpp` by `demo/tools/check_shaders.py --write`;
+  `tools/verify.sh` runs the check, which fails on a changed character in a piece, a palette
+  or the BSD notice, on a change to how the pieces are joined, on a uniform `port.js` never
+  names or hands to `.set()` as a float when it is an integer, and on any change to the C++
+  `port.js` was translated from (SHA-256 of Model.h, Controls.{h,cpp}, Camera.{h,cpp},
+  Palettes.cpp's Build and ten Bolometer.cpp functions; `--hashes` prints new ones once a
+  reader has carried a change across). `demo/port.js` is that translation, by hand; the page
+  says it is a port only a reader checks. `demo/plugin.js` is the page: the panel, the
+  harness's card in GLSL (the default clip), the line under the picture, 13 presets of its own
+  and `window.bolometerDemo` for the crosscheck.
+- **The one line the page adds to the GLSL:** `precision highp sampler2D;` in the histogram's
+  vertex stage. The kit's `port()` raises only float and int there, and ES 3.00 reads a vertex
+  sampler2D at lowp, which a phone GPU could honour and bin the temperatures coarsely.
+  check_shaders.py pins it. Checked on a desktop GPU only.
+- **The clock** is the kit's (rAF deltas capped at 0.1 s, still while paused) handed in by
+  SetTime every frame. The vote on seconds or milliseconds is not ported: the page hands
+  seconds, as bmtest does (`SetClockScaleForTest( 1.0 )`), so the camera does not restart a
+  few frames in as it would in Arena. Restart sends the clock back to 0 and the camera primes
+  on a clock that ran backwards, as the plugin does. Paused, nothing is read out, so every
+  control but Mix shows on Play or Step.
+- **Shutter** (FF_TYPE_EVENT) is a kit toggle the page releases after one frame.
+- **Alpha:** the kit's clips are premultiplied and the plugin's composite assumes straight
+  alpha; only the Shape on transparency clip has any. Said on the page.
+- **Crosscheck** (`demo/tools/crosscheck/crosscheck.py`, by hand: needs Chrome and a GPU), M4
+  Max, macOS 26.4.1, Chrome 157 (ANGLE on Metal) against bmtest's GL 4.1, 18 November 2026,
+  320×180 unless named, every frame of each run compared:
+
+  | case | frames | identical | max | readouts, FFCs |
+  | --- | --- | --- | --- | --- |
+  | defaults, 30 Hz, the three other palettes, Manual, Plateau 7% and 100%, Halo 0 and 3, a Shutter press, Shutter Interval 5 s with Drift 1 K/min (30 fps), Frame Rate cued 9 → 60 → 30 Hz, Palette and Span cued, host 24 and 144 fps, the defaults at 640×360 and 1280×720 | 24 to 216 each | **100%** (18 cases) | **0** | all the same |
+  | Narcissus 2 K + Drift 1 K/min | 120 | 99.9999% (one pixel in each of 6 frames) | 1 | same |
+  | 60 Hz | 120 | 100.0000% (one pixel of frame 69) | 2 | same |
+  | Mix 0.5 | 90 | 68.41% | 1 | same |
+
+  The 60 Hz pixel is one 8-bit code apart before the palette, which Ironbow shows as two
+  levels of green. Every Mix 0.5 difference was checked to be an exact half-way tie: on frame
+  0, all 22,455 differing channels are where the clip's code plus the camera's is odd, the
+  other 66,017 channels are exact on both sides, bmtest rounds every tie up and the page 21% of
+  them down (its float lands an ulp below the half). Handing the page the clip as bmtest holds
+  it (`--input float`, RGBA32F codes / 255) changes no figure, so it is arithmetic, not the
+  clip's representation. The tool's strict test (max 1, 99% identical) therefore reports these
+  two as FAIL; neither is a port bug. The table matches `bmtest --list` (12 controls, names,
+  kinds, defaults) and bmtest accepts all 9 option elements by name; every uniform is set, no
+  GL error. The page's card is within one code of the harness's everywhere (95.3% identical: a
+  float port of a picture drawn in double). Negative controls, all caught: Plateau one step
+  (0.001) off, max 7; Halo one step, max 7; Level one step (Manual), max 21; the clock 1 ms
+  early, max 255; frame 19 dropped, max 225. Not covered: a raster change (the resample pass),
+  which `--pipe` cannot make.
+- **Flashes on the page:** its default view (the harness's card at the defaults, 960×540,
+  rendered through `window.bolometerDemo` into an RGBA8 target at 60 fps on the page's clock,
+  40 s through the FFC at 30 s, written lossless and run through xenon's `flashcheck.py`): 0
+  transitions over the whole frame, 2 (one flash) in the worst window in 40 s. 60 Hz the same;
+  Rainbow 0; every preset over 12 s, 0.
 
 ## Open questions
 

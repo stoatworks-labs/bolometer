@@ -94,6 +94,21 @@ the composite or the resize.
 - `~/Projects/resolume/bolometer`, public at github.com/stoatworks-labs/bolometer. The spec is
   `~/Projects/resolume/specs/SPEC-bolometer.md`.
 
+## Browser demo
+- `demo/` is served at https://bolometer-demo.stoatworks-labs.com/ by the Worker in
+  `wrangler.toml` (a route, plus a proxied AAAA `100::` record for `bolometer-demo`: delete
+  the record and the page goes dark while deploys stay green). `.github/workflows/deploy.yml`
+  redeploys it on every push to main; by hand: `cf-run npx wrangler deploy`.
+- `demo/shaders.js` and `demo/palettes.js` are copies. After changing a shader or a palette,
+  run `python3 demo/tools/check_shaders.py --write`, then `python3 demo/tools/check_shaders.py`;
+  `tools/verify.sh` fails on any drift, and on any change to the C++ `demo/port.js` came from.
+- `demo/port.js` is a hand port of Model.h, Controls.cpp, Camera.cpp, Palettes.cpp's Build and
+  Bolometer.cpp's CPU half: change it by hand with the C++, update the hashes
+  (`check_shaders.py --hashes`), then run `demo/tools/crosscheck/crosscheck.py` (Chrome and a
+  GPU; figures in AGENTS.md).
+- `demo/vendor/` is the shared kit (`stoatworks-backend/resolume-demo`); never edit it.
+- Keep the photosensitivity note at the top of the page.
+
 ## Diagnostics
 
 `source/Diag.{h,cpp}`: log file only, no crash handler (this runs inside Resolume).

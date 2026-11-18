@@ -122,7 +122,18 @@ on every frame (a 60 Hz sensor) and Halo 3: a whole frame **1.30 ms** at 720p an
 - The software renderer was checked at 320×180 only, and `--resize` at its own three rasters.
 - The defaults were chosen over seven of Resolume's bundled clips through `--pipe`, looked at
   as stills, not in a show.
-- No user guide, no presets, no OpenFX port and no browser demo.
+- No user guide, no presets and no OpenFX port.
+
+## Browser demo
+
+[bolometer-demo.stoatworks-labs.com](https://bolometer-demo.stoatworks-labs.com/) runs the
+plugin's own GLSL in WebGL2, unedited, fed by a JavaScript port of its CPU half (the camera's
+clock, the shutter's schedule, the lag's weights, the drift, the AGC's damping and the pass
+orchestration) that only a reader checks, over the harness's card, a generated clip or one you
+pick. Run frame by frame against `bmtest` from the same frames, 18 of 21 cases came out
+identical to the bit; in the other three a few values rounded to the neighbouring 8-bit code
+(`demo/tools/crosscheck/`; the figures are in AGENTS.md). It opens on the plugin's defaults, with a photosensitivity note at
+the top. It is a demo, not the plugin, and the page lists what it leaves out.
 
 ## Build
 
