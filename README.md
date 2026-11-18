@@ -93,6 +93,14 @@ macOS builds are signed and notarised and open normally. The Windows builds are 
 
 <!-- downloads:end -->
 
+## Video
+
+> **Photosensitivity warning:** the automatic gain in this effect can turn a clip's flicker
+> into flashing. The video's cuts are measured frame by frame: no second holds more than two
+> large-area flashes, under the three a second that broadcast and web guidance allows.
+
+[![Bolometer: your clip through a thermal camera, for Resolume](docs/video-thumb.png)](https://www.youtube.com/watch?v=LICnhnOUwjs)
+
 ## Controls
 
 | Group | |
